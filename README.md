@@ -7,7 +7,7 @@ Kafka was originally developed at LinkedIn in 2010 to address scalability issues
 
 This article provides a deep dive into Kafka's core concepts, explains its role in data engineering, and explores production use cases in large-scale enterprises. We will also walk through a hands-on streaming project using the Transport for London (TfL) API integrated with Confluent Cloud.
 
-![Kafka Architecture Overview](images/kafka-architecture-overview.png)
+![Kafka Architecture Overview](images/kafka_architecture_overview.png)
 
 *Cited: [Apache Kafka Documentation](https://kafka.apache.org/documentation/), Kreps et al. (2011), Confluent Blog.*
 
@@ -36,7 +36,7 @@ Beyond messaging, Kafka enables real-time processing via two main APIs:
 - **Kafka Streams** (A Java library for stateful processing).
 - **ksqlDB** (a SQL-like interface to process Kafka data declaratively).
 
-![Kafka Core Components](images/kafka-core-components.png)
+![Kafka Core Components](images/core_components.png)
 
 *Cited: [Kafka Concepts Guide](https://kafka.apache.org/documentation/#introduction), Confluent Kafka 101 series.*
 
@@ -66,7 +66,7 @@ Processed data can be routed downstream using **sink connectors** to:
 
 This makes Kafka a central event hub for both operational and analytical systems.
 
-![Confluent Cloud Messages Tab](images/confluent-cloud-messages.png)
+![Confluent Cloud Messages Tab](images/ccloud_messages.png)
 
 *Cited: Confluent Engineering Blog, "Kafka as the Central Nervous System of Data."*
 
@@ -81,7 +81,7 @@ Steps:
 2. Create a **topic** called `london_transport`.
 3. Download the project folder or open in VS Code after setting up the language and `client.properties` credentials from Confluent Cloud.
 
-![Confluent Cloud Topic Creation](images/confluent-cloud-topic-creation.png)
+![Confluent Cloud Topic Creation](images/create_topic.png)
 
 ### 4.2 Writing a Python Producer
 My producer (`producer.py`) connects to the TfL API, retrieves live bus arrivals, and sends them into Kafka. The API provides an endpoint like:
@@ -146,7 +146,7 @@ if __name__ == "__main__":
 ```
 When executed, the producer continuously publishes JSON records (each representing a bus arrival) into the Kafka topic.
 
-![Producer Terminal Output](images/producer-terminal-output.png)
+![Producer Terminal Output](images/producer_terminal_output.png)
 
 ### 4.3 Consuming Data
 On the other side, a **Kafka consumer** (`consumer.py`) reads from the `london_transport` topic.
@@ -192,31 +192,19 @@ if __name__ == "__main__":
 ```
 Running this consumer displays the real-time stream of events from the TfL API via Kafka.
 
-![Consumer Terminal Output](images/consumer-terminal-output.png)
+![Consumer Terminal Output](images/consumer_terminal_output.png)
 
 ### 4.4 Querying with ksqlDB
-To further explore the data, Confluent provides **ksqlDB**, which allows SQL-like queries over Kafka topics. First, we register a stream:
+To further explore the data, Confluent provides **ksqlDB**, which allows SQL-like queries over Kafka topics. 
 ```sql
-CREATE STREAM london_transport_stream (
-    lineId VARCHAR,
-    destinationName VARCHAR,
-    timeToStation BIGINT
-) WITH (
-    KAFKA_TOPIC='london_transport',
-    VALUE_FORMAT='JSON'
-);
+SELECT * 
+FROM `default`.`cluster_0`.`london_transport`
+LIMIT 5;
 ```
+Examining raw data structure.
+*Not good practice to select all*
 
-We can now run real-time queries such as:
-```sql
-SELECT lineId, destinationName, timeToStation
-FROM london_transport_stream
-WHERE destinationName = 'Victoria'
-EMIT CHANGES;
-```
-This filters the stream to show only buses heading to Victoria.
-
-![ksqlDB Query Console](images/ksqldb-query-console.png)
+![ksqlDB Query Console](images/ksqlDB_quey.png)
 
 ## 5. Real-World Use Cases of Apache Kafka
 Kafka's strength lies not just in its technical design but in its widespread adoption across industries. From social networks to ride-hailing platforms and financial services, Kafka has become the backbone for real-time data processing.

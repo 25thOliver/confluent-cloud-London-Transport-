@@ -1,0 +1,37 @@
+# Virtual environments
+venv/
+london/
+__pycache__/
+*.pyc
+# Local settings
+config.ini
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints
+# Logs
+logs/
+*.log
+# Data files
+data/
+*.csv
+# Ignore specific files
+.DS_Store
+.idea/
+.vscode/
+# Ignore specific scripts
+*.sh
+# Ignore specific Python files
+*.py~
+# Ignore specific configuration files
+*.cfg
+# Ignore specific environment files
+*.env
+# Ignore specific output files
+output/ 
+*.out
+# Ignore specific temporary files
+tmp/
+*.tmp
+# Ignore environment variables file
+.env
+client.properties
+
